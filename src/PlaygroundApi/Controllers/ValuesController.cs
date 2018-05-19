@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PlaygroundApi.Exceptions;
 
 namespace PlaygroundApi.Controllers
 {
@@ -38,6 +40,9 @@ namespace PlaygroundApi.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
+            if (id == 404)
+                throw new ResourceNotFoundApiException(ApiErrorCode.ValueNotFound, $"Cannot find value with id={id}");
+
             return "value";
         }
 
@@ -49,6 +54,8 @@ namespace PlaygroundApi.Controllers
         [HttpPost]
         public void Post([FromBody]string value)
         {
+            if (string.IsNullOrEmpty(value))
+                throw new ValidationApiException(ApiErrorCode.MissingInformation, $"Parameter {nameof(value)} must be provided.");
         }
 
         /// <summary>
@@ -60,6 +67,10 @@ namespace PlaygroundApi.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
+            if (string.IsNullOrEmpty(value))
+                throw new ValidationApiException(ApiErrorCode.MissingInformation, $"Parameter {nameof(value)} must be provided.");
+
+            throw new NotImplementedException($"Method {nameof(Put)} not implemented.");
         }
 
         /// <summary>
@@ -70,6 +81,8 @@ namespace PlaygroundApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            if (id == 42)
+                throw new ValidationApiException(ApiErrorCode.DeleteValueForbidden, $"You are not allowed to delete the Answer to the Ultimate Question of Life, the Universe, and Everything.");
         }
     }
 }
