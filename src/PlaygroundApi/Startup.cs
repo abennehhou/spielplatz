@@ -70,6 +70,7 @@ namespace PlaygroundApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
         {
+            app.UseMiddleware(typeof(LoggingMiddleware));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
