@@ -34,6 +34,8 @@ namespace PlaygroundApi
             });
             services.AddMvc();
 
+            services.AddCors();
+
             services.AddApiVersioning(
                 o =>
                 {
@@ -72,6 +74,7 @@ namespace PlaygroundApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseMvc();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
