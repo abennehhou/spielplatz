@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Playground.Repositories;
 using Playground.Services;
+using PlaygroundApi.Mapping;
 using PlaygroundApi.Middlewares;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -73,6 +75,9 @@ namespace PlaygroundApi
             // Dependency injection
             services.AddTransient<IItemsRepository, ItemsRepository>();
             services.AddTransient<IItemsService, ItemsService>();
+
+            var mapper = AutoMapperConfig.Configure();
+            services.AddTransient<IMapper, IMapper>(c => mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

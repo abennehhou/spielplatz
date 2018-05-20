@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Playground.Dto;
@@ -16,12 +16,14 @@ namespace PlaygroundApi.Controllers
     {
         private readonly ILogger<ItemsController> _logger;
         private readonly IItemsService _itemsService;
+        private readonly IMapper _mapper;
 
         private ApiVersion RequestedApiVersion => HttpContext.ApiVersionProperties()?.ApiVersion;
 
-        public ItemsController(IItemsService itemsService, ILogger<ItemsController> logger)
+        public ItemsController(IItemsService itemsService, IMapper mapper, ILogger<ItemsController> logger)
         {
             _itemsService = itemsService;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -35,14 +37,7 @@ namespace PlaygroundApi.Controllers
         {
             _logger.LogDebug($"Get items - ApiVersion: {RequestedApiVersion}");
             var items = _itemsService.GetAllItems();
-            return items.Select(x => new ItemDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Owner = x.Owner,
-                Description = x.Description
-            })
-            .ToList();
+            return _mapper.Map<List<ItemDto>>(items);
         }
     }
 }
