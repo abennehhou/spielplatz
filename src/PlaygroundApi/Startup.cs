@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Playground.Repositories;
+using Playground.Services;
 using PlaygroundApi.Middlewares;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -14,6 +16,7 @@ namespace PlaygroundApi
     public class Startup
     {
         public static readonly string ApiXmlComments = "PlaygroundApi.xml";
+        public static readonly string DtoXmlComments = "Playground.Dto.xml";
 
         public Startup(IConfiguration configuration)
         {
@@ -62,9 +65,14 @@ namespace PlaygroundApi
                 // Set the comments path for the Swagger JSON and UI.
                 var basePath = AppContext.BaseDirectory;
                 c.IncludeXmlComments(Path.Combine(basePath, ApiXmlComments));
+                c.IncludeXmlComments(Path.Combine(basePath, DtoXmlComments));
             });
 
             // To display swagger at startup, change "launchUrl" to "swagger" in launchSettings.json (ignored by .gitignore)
+
+            // Dependency injection
+            services.AddTransient<IItemsRepository, ItemsRepository>();
+            services.AddTransient<IItemsService, ItemsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
