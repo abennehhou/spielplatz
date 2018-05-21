@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Playground.Repositories;
 using Playground.Services;
 using PlaygroundApi.Mapping;
 using PlaygroundApi.Middlewares;
+using PlaygroundApi.Validation;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace PlaygroundApi
@@ -38,7 +40,11 @@ namespace PlaygroundApi
                 // can also be used to control the format of the API version in route templates
                 o.SubstituteApiVersionInUrl = true;
             });
-            services.AddMvc();
+            services.AddMvc().AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<ItemDtoValidator>();
+                fv.ImplicitlyValidateChildProperties = true;
+            });
 
             services.AddCors();
 

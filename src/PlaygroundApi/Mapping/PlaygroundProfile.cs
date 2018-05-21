@@ -11,6 +11,7 @@ namespace PlaygroundApi.Mapping
         public PlaygroundProfile()
         {
             CreateMap<Item, ItemDto>();
+            CreateMap<ItemDto, Item>();
         }
     }
 }

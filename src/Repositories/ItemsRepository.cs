@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using Playground.Domain;
 
 namespace Playground.Repositories
 {
     public class ItemsRepository : IItemsRepository
     {
-        public List<Item> GetAllItems()
-        {
-            return new List<Item>
+        private static ConcurrentBag<Item> Items = new ConcurrentBag<Item>
             {
                 new Item
                 {
@@ -24,6 +25,21 @@ namespace Playground.Repositories
                     Description = "your description"
                 }
             };
+
+        public List<Item> GetAllItems()
+        {
+            return Items.ToList();
+        }
+
+        public Item GetById(string id)
+        {
+            return Items.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void InsertItem(Item item)
+        {
+            item.Id = Guid.NewGuid().ToString();
+            Items.Add(item);
         }
     }
 }

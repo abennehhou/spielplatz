@@ -17,5 +17,15 @@ namespace Playground.Services
         {
             return _itemsRepository.GetAllItems();
         }
+
+        public Item GetById(string id)
+        {
+            return _itemsRepository.GetById(id);
+        }
+
+        public void InsertItem(Item item)
+        {
+            _itemsRepository.InsertItem(item);
+        }
     }
 }

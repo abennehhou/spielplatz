@@ -6,6 +6,7 @@
         MissingInformation,
         InvalidInformation,
         ValueNotFound,
-        DeleteValueForbidden
+        DeleteValueForbidden,
+        ItemNotFound
     }
 }

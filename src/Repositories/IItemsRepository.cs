@@ -6,5 +6,7 @@ namespace Playground.Repositories
     public interface IItemsRepository
     {
         List<Item> GetAllItems();
+        Item GetById(string id);
+        void InsertItem(Item item);
     }
 }
