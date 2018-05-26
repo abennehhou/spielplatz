@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Playground.Repositories;
 using Playground.Services;
 using PlaygroundApi.Mapping;
@@ -19,8 +20,11 @@ namespace PlaygroundApi
 {
     public class Startup
     {
-        public static readonly string ApiXmlComments = "PlaygroundApi.xml";
-        public static readonly string DtoXmlComments = "Playground.Dto.xml";
+        private const string ApiXmlComments = "PlaygroundApi.xml";
+        private const string DtoXmlComments = "Playground.Dto.xml";
+
+        private const string AppSettingsKeyMongoDbNamePlayground = "MongoDbNamePlayground";
+        private const string ConnectionStringMongoDbPlayground = "MongoDbPlayground";
 
         public Startup(IConfiguration configuration)
         {
@@ -79,7 +83,10 @@ namespace PlaygroundApi
             // To display swagger at startup, change "launchUrl" to "swagger" in launchSettings.json (ignored by .gitignore)
 
             // Dependency injection
-            services.AddTransient<IItemsRepository, ItemsRepository>();
+            var connectionString = Configuration.GetConnectionString(ConnectionStringMongoDbPlayground);
+            var databaseName = Configuration[AppSettingsKeyMongoDbNamePlayground];
+
+            services.AddTransient<IItemsRepository, ItemsRepository>(c => new ItemsRepository(connectionString, databaseName, c.GetService<ILogger<ItemsRepository>>()));
             services.AddTransient<IItemsService, ItemsService>();
 
             var mapper = AutoMapperConfig.Configure();

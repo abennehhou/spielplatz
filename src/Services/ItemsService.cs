@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using MongoDB.Bson;
 using Playground.Domain;
 using Playground.Repositories;
 
@@ -13,19 +15,22 @@ namespace Playground.Services
             _itemsRepository = itemsRepository;
         }
 
-        public List<Item> GetAllItems()
+        public async Task<List<Item>> GetAllItems()
         {
-            return _itemsRepository.GetAllItems();
+            return await _itemsRepository.GetAllItems();
         }
 
-        public Item GetById(string id)
+        public async Task<Item> GetById(string id)
         {
-            return _itemsRepository.GetById(id);
+            var objectId = ObjectId.Empty;
+            ObjectId.TryParse(id, out objectId);
+
+            return await _itemsRepository.GetById(objectId);
         }
 
-        public void InsertItem(Item item)
+        public async Task InsertItem(Item item)
         {
-            _itemsRepository.InsertItem(item);
+            await _itemsRepository.InsertItem(item);
         }
     }
 }

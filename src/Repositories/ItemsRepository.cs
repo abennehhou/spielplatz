@@ -1,45 +1,46 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Playground.Domain;
 
 namespace Playground.Repositories
 {
     public class ItemsRepository : IItemsRepository
     {
-        private static ConcurrentBag<Item> Items = new ConcurrentBag<Item>
-            {
-                new Item
-                {
-                    Id = "1",
-                    Name = "My book",
-                    Owner = "me",
-                    Description = "my description"
-                },
-                new Item
-                {
-                    Id = "2",
-                    Name = "Your computer",
-                    Owner = "you",
-                    Description = "your description"
-                }
-            };
+        private readonly PlaygroundContext _playgroundContext;
+        private readonly ILogger _logger;
 
-        public List<Item> GetAllItems()
+        public ItemsRepository(string connectionString, string databaseName, ILogger<ItemsRepository> logger)
         {
-            return Items.ToList();
+            _playgroundContext = new PlaygroundContext(connectionString, databaseName);
+            _logger = logger;
         }
 
-        public Item GetById(string id)
+        public async Task<List<Item>> GetAllItems()
         {
-            return Items.FirstOrDefault(x => x.Id == id);
+            var collection = _playgroundContext.GetItemsCollection();
+            var query = collection.Find(x => true);
+
+            _logger.LogDebug($"Get items query: {query}.");
+            var items = await query.ToListAsync();
+
+            return items;
         }
 
-        public void InsertItem(Item item)
+        public async Task<Item> GetById(ObjectId id)
         {
-            item.Id = Guid.NewGuid().ToString();
-            Items.Add(item);
+            var collection = _playgroundContext.GetItemsCollection();
+
+            var item = await collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+            return item;
+        }
+
+        public async Task InsertItem(Item item)
+        {
+            await _playgroundContext.GetItemsCollection().InsertOneAsync(item);
         }
     }
 }

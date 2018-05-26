@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MongoDB.Bson;
 using Playground.Domain;
 using Playground.Dto;
 
@@ -12,6 +13,7 @@ namespace PlaygroundApi.Mapping
         {
             CreateMap<Item, ItemDto>();
             CreateMap<ItemDto, Item>();
+            CreateMap<string, ObjectId>().ConvertUsing<StringToObjectIdConverter>();
         }
     }
 }

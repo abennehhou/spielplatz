@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,10 +38,10 @@ namespace PlaygroundApi.Controllers
         /// <returns>Collection of items.</returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<ItemDto>), 200)]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             _logger.LogDebug($"Get items - ApiVersion: {RequestedApiVersion}");
-            var items = _itemsService.GetAllItems();
+            var items = await _itemsService.GetAllItems();
             var itemDtos = _mapper.Map<List<ItemDto>>(items);
             return Ok(itemDtos);
         }
@@ -52,12 +53,12 @@ namespace PlaygroundApi.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ItemDto), 200)]
         [Route("{id}", Name = RouteNameGetById)]
-        public IActionResult GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ValidationApiException(ApiErrorCode.MissingInformation, $"Parameter {nameof(id)} must be provided.");
 
-            var item = _itemsService.GetById(id);
+            var item = await _itemsService.GetById(id);
 
             if (item == null)
                 throw new ResourceNotFoundApiException(ApiErrorCode.ItemNotFound, $"Cannot find item with id='{id}'.");
@@ -74,7 +75,7 @@ namespace PlaygroundApi.Controllers
         [HttpPost]
         [ValidateCommand]
         [ProducesResponseType(typeof(ItemDto), 201)]
-        public IActionResult Post([FromBody]ItemDto itemDto)
+        public async Task<IActionResult> Post([FromBody]ItemDto itemDto)
         {
             if (itemDto == null)
                 throw new ValidationApiException(ApiErrorCode.MissingInformation, $"Parameter {nameof(itemDto)} must be provided.");
@@ -83,7 +84,7 @@ namespace PlaygroundApi.Controllers
                 throw new ValidationApiException(ApiErrorCode.InvalidInformation, $"Parameter {nameof(itemDto.Id)} must be empty during the creation.");
 
             var item = _mapper.Map<Item>(itemDto);
-            _itemsService.InsertItem(item);
+            await _itemsService.InsertItem(item);
 
             var createdItemDto = _mapper.Map<ItemDto>(item);
 

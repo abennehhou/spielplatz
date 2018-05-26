@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Playground.Domain;
 
 namespace Playground.Services
 {
     public interface IItemsService
     {
-        List<Item> GetAllItems();
-        Item GetById(string id);
-        void InsertItem(Item item);
+        Task<List<Item>> GetAllItems();
+        Task<Item> GetById(string id);
+        Task InsertItem(Item item);
     }
 }
