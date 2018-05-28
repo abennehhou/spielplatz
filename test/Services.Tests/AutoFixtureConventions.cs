@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using AutoFixture.AutoMoq;
 using MongoDB.Bson;
 
 namespace Services.Tests
@@ -6,9 +7,8 @@ namespace Services.Tests
     internal class AutoFixtureConventions : CompositeCustomization
     {
         public AutoFixtureConventions()
-            : base(new MongoObjectIdCustomization())
+            : base(new MongoObjectIdCustomization(), new AutoMoqCustomization())
         {
-
         }
 
         private class MongoObjectIdCustomization : ICustomization
