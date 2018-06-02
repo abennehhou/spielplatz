@@ -18,9 +18,11 @@ Documentation available here: https://abennehhou.github.io/dotnet/dotnetcore/.
 * AutoMapper
 * Pagination
 * Unit tests
+* Hyperlinks
 
 # MongoDb
 
 * Integrate MongoDb driver
 * Connect to atlas
 * Filtering
+* Save operations history

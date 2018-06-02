@@ -87,7 +87,9 @@ namespace PlaygroundApi
             var databaseName = Configuration[AppSettingsKeyMongoDbNamePlayground];
 
             services.AddTransient<IItemsRepository, ItemsRepository>(c => new ItemsRepository(connectionString, databaseName, c.GetService<ILogger<ItemsRepository>>()));
+            services.AddTransient<IOperationsRepository, OperationsRepository>(c => new OperationsRepository(connectionString, databaseName, c.GetService<ILogger<OperationsRepository>>()));
             services.AddTransient<IItemsService, ItemsService>();
+            services.AddTransient<IOperationsService, OperationsService>();
 
             var mapper = AutoMapperConfig.Configure();
             services.AddTransient<IMapper, IMapper>(c => mapper);

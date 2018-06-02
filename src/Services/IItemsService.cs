@@ -10,5 +10,7 @@ namespace Playground.Services
         Task<IPagedList<Item>> GetItems(ItemSearchParameter searchParameter);
         Task<Item> GetById(string id);
         Task InsertItem(Item item);
+        Task<long> ReplaceItemAsync(Item item);
+        Task<long> DeleteItemAsync(string id);
     }
 }

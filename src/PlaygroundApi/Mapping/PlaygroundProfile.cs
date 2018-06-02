@@ -16,6 +16,8 @@ namespace PlaygroundApi.Mapping
             CreateMap<Item, ItemDto>();
             CreateMap<ItemDto, Item>();
             CreateMap<string, ObjectId>().ConvertUsing<StringToObjectIdConverter>();
+            CreateMap<Operation, OperationDto>();
+            CreateMap<Difference, DifferenceDto>();
         }
     }
 }

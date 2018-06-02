@@ -35,7 +35,7 @@ namespace Playground.Repositories
                 filter = filter & Builders<Item>.Filter.AnyEq(x => x.Tags, searchParameters.Tag);
 
             var query = collection.Find(filter)
-                .SortBy(acc => acc.Id)
+                .SortBy(x => x.Id)
                 .Skip(searchParameters.Skip)
                 .Limit(searchParameters.Limit);
 
@@ -57,6 +57,30 @@ namespace Playground.Repositories
         public async Task InsertItem(Item item)
         {
             await _playgroundContext.GetItemsCollection().InsertOneAsync(item);
+        }
+
+        public async Task<long> ReplaceItemAsync(Item item)
+        {
+            var result = await _playgroundContext.GetItemsCollection().ReplaceOneAsync(x => x.Id == item.Id, item);
+
+            if (result.IsAcknowledged)
+                _logger.LogDebug($"Update item '{item.Id}' acknowledged. MatchedCount: {result.MatchedCount}, modifiedCount: {result.ModifiedCount}.");
+            else
+                _logger.LogDebug($"Update item '{item.Id}' not acknowledged.");
+
+            return result.IsAcknowledged ? result.ModifiedCount : 0;
+        }
+
+        public async Task<long> DeleteItemAsync(ObjectId id)
+        {
+            var result = await _playgroundContext.GetItemsCollection().DeleteOneAsync(x => x.Id == id);
+
+            if (result.IsAcknowledged)
+                _logger.LogDebug($"Delete item '{id}' acknowledged. v: {result.DeletedCount}.");
+            else
+                _logger.LogDebug($"Delete item '{id}' not acknowledged.");
+
+            return result.IsAcknowledged ? result.DeletedCount : 0;
         }
     }
 }

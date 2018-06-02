@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Playground.Domain;
 using Playground.Dto;
 using Playground.Services;
-using PlaygroundApi.Exceptions;
+using PlaygroundApi.Domain.Exceptions;
 using PlaygroundApi.Navigation;
 using PlaygroundApi.Validation;
 
@@ -91,6 +91,48 @@ namespace PlaygroundApi.Controllers
             var createdItemDto = _mapper.Map<ItemDto>(item);
 
             return CreatedAtRoute(RouteNameGetById, new { id = item.Id }, createdItemDto);
+        }
+
+        /// <summary>
+        /// Replaces an item.
+        /// </summary>
+        /// <param name="id">Id of the item to update.</param>
+        /// <param name="itemDto">Modified item.</param>
+        [HttpPut]
+        [ValidateCommand]
+        [ProducesResponseType(typeof(ItemDto), 200)]
+        [Route("{id}")]
+        public async Task<IActionResult> Put(string id, [FromBody]ItemDto itemDto)
+        {
+            if (itemDto == null)
+                throw new ValidationApiException(ApiErrorCode.MissingInformation, $"Parameter {nameof(itemDto)} must be provided.");
+
+            if (itemDto.Id != id)
+                throw new ValidationApiException(ApiErrorCode.InvalidInformation, $"ItemId must be the same in the uri and in the body. Provided values: '{id}' and '{itemDto.Id}'.");
+
+            var item = _mapper.Map<Item>(itemDto);
+
+            await _itemsService.ReplaceItemAsync(item);
+
+            var updatedItem = _mapper.Map<ItemDto>(item);
+
+            return Ok(updatedItem);
+        }
+
+        /// <summary>
+        /// Deletes an item.
+        /// </summary>
+        /// <param name="id">Id of the item to delete.</param>
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new ValidationApiException(ApiErrorCode.MissingInformation, $"Parameter {nameof(id)} must be provided.");
+
+            await _itemsService.DeleteItemAsync(id);
+
+            return Ok();
         }
     }
 }

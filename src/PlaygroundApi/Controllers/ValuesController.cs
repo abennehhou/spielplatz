@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PlaygroundApi.Exceptions;
+using PlaygroundApi.Domain.Exceptions;
 
 namespace PlaygroundApi.Controllers
 {

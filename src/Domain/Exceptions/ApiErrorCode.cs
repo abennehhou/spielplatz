@@ -1,4 +1,4 @@
-﻿namespace PlaygroundApi.Exceptions
+﻿namespace PlaygroundApi.Domain.Exceptions
 {
     public enum ApiErrorCode
     {

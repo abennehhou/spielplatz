@@ -8,6 +8,7 @@ namespace Playground.Repositories
     public class PlaygroundContext
     {
         private const string CollectionNameItems = "items";
+        private const string CollectionNameOperations = "operations";
 
         private readonly IMongoDatabase _playgroundDatabase;
 
@@ -53,6 +54,11 @@ namespace Playground.Repositories
         public IMongoCollection<Item> GetItemsCollection()
         {
             return _playgroundDatabase.GetCollection<Item>(CollectionNameItems);
+        }
+
+        public IMongoCollection<Operation> GetOperationsCollection()
+        {
+            return _playgroundDatabase.GetCollection<Operation>(CollectionNameOperations);
         }
     }
 }

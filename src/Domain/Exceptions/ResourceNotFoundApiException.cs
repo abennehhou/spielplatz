@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PlaygroundApi.Exceptions
+namespace PlaygroundApi.Domain.Exceptions
 {
     public class ResourceNotFoundApiException : ApiException
     {
