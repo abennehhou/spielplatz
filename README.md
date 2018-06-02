@@ -16,9 +16,11 @@ Documentation available here: https://abennehhou.github.io/dotnet/dotnetcore/.
 * Fluent validation
 * CORS
 * AutoMapper
+* Pagination
 * Unit tests
 
 # MongoDb
 
 * Integrate MongoDb driver
 * Connect to atlas
+* Filtering

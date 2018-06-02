@@ -6,6 +6,7 @@ using Moq;
 using Playground.Domain;
 using Playground.Repositories;
 using Services.Tests;
+using X.PagedList;
 using Xunit;
 
 namespace Playground.Services.Tests
@@ -40,13 +41,13 @@ namespace Playground.Services.Tests
         }
 
         [Theory, CustomAutoData]
-        public async Task GetAllItemsReturnsExpectedItems(List<Item> expectedItems, [Frozen]Mock<IItemsRepository> itemsRepositoryMock, ItemsService itemsService)
+        public async Task GetItemsReturnsExpectedItems(IPagedList<Item> expectedItems, ItemSearchParameter searchParameters, [Frozen]Mock<IItemsRepository> itemsRepositoryMock, ItemsService itemsService)
         {
             // Arrange
-            itemsRepositoryMock.Setup(x => x.GetAllItems()).ReturnsAsync(expectedItems);
+            itemsRepositoryMock.Setup(x => x.GetItems(searchParameters)).ReturnsAsync(expectedItems);
 
             // Act
-            var result = await itemsService.GetAllItems();
+            var result = await itemsService.GetItems(searchParameters);
 
             // Assert
             Assert.Equal(result, expectedItems);

@@ -1,4 +1,6 @@
-﻿namespace Playground.Dto
+﻿using System.Collections.Generic;
+
+namespace Playground.Dto
 {
     /// <summary>
     /// Data transfer object of an item.
@@ -24,5 +26,10 @@
         /// Item's owner. Optional.
         /// </summary>
         public string Owner { get; set; }
+
+        /// <summary>
+        /// Set of tags
+        /// </summary>
+        public List<string> Tags { get; set; }
     }
 }

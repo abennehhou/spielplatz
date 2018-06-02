@@ -331,3 +331,5 @@ ASALocalRun/
 
 # VS Code
 .vscode
+
+*.bak

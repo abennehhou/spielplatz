@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using Playground.Domain;
 using Playground.Repositories;
+using X.PagedList;
 
 namespace Playground.Services
 {
@@ -15,9 +16,9 @@ namespace Playground.Services
             _itemsRepository = itemsRepository;
         }
 
-        public async Task<List<Item>> GetAllItems()
+        public async Task<IPagedList<Item>> GetItems(ItemSearchParameter searchParameter)
         {
-            return await _itemsRepository.GetAllItems();
+            return await _itemsRepository.GetItems(searchParameter);
         }
 
         public async Task<Item> GetById(string id)

@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System.Collections.Generic;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Playground.Domain
@@ -10,5 +11,6 @@ namespace Playground.Domain
         public string Name { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }
+        public List<string> Tags { get; set; }
     }
 }

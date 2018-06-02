@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using Playground.Domain;
 using Playground.Dto;
+using X.PagedList;
 
 namespace PlaygroundApi.Mapping
 {
@@ -11,6 +12,7 @@ namespace PlaygroundApi.Mapping
 
         public PlaygroundProfile()
         {
+            CreateMap(typeof(IPagedList<>), typeof(PagedListDto<>)).ConvertUsing(typeof(PagedListToDtoConverter<,>));
             CreateMap<Item, ItemDto>();
             CreateMap<ItemDto, Item>();
             CreateMap<string, ObjectId>().ConvertUsing<StringToObjectIdConverter>();

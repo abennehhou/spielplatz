@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Playground.Domain;
+using X.PagedList;
 
 namespace Playground.Repositories
 {
@@ -18,15 +19,30 @@ namespace Playground.Repositories
             _logger = logger;
         }
 
-        public async Task<List<Item>> GetAllItems()
+        public async Task<IPagedList<Item>> GetItems(ItemSearchParameter searchParameters)
         {
             var collection = _playgroundContext.GetItemsCollection();
-            var query = collection.Find(x => true);
+
+            var filter = Builders<Item>.Filter.Empty;
+
+            if (!string.IsNullOrEmpty(searchParameters.Name))
+                filter = filter & Builders<Item>.Filter.Eq(x => x.Name, searchParameters.Name);
+
+            if (!string.IsNullOrEmpty(searchParameters.Owner))
+                filter = filter & Builders<Item>.Filter.Eq(x => x.Owner, searchParameters.Owner);
+
+            if (!string.IsNullOrEmpty(searchParameters.Tag))
+                filter = filter & Builders<Item>.Filter.AnyEq(x => x.Tags, searchParameters.Tag);
+
+            var query = collection.Find(filter)
+                .SortBy(acc => acc.Id)
+                .Skip(searchParameters.Skip)
+                .Limit(searchParameters.Limit);
 
             _logger.LogDebug($"Get items query: {query}.");
             var items = await query.ToListAsync();
-
-            return items;
+            var totalRows = (int)await collection.CountAsync(filter);
+            return items.ToPagedList(searchParameters.Skip, searchParameters.Limit, totalRows);
         }
 
         public async Task<Item> GetById(ObjectId id)

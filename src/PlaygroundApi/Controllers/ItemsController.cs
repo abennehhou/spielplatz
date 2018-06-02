@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -33,16 +32,16 @@ namespace PlaygroundApi.Controllers
         }
 
         /// <summary>
-        /// Get all items.
+        /// Get all items filtered with search parameters.
         /// </summary>
         /// <returns>Collection of items.</returns>
         [HttpGet]
-        [ProducesResponseType(typeof(List<ItemDto>), 200)]
-        public async Task<IActionResult> Get()
+        [ProducesResponseType(typeof(PagedListDto<ItemDto>), 200)]
+        public async Task<IActionResult> Get(ItemSearchParameter search)
         {
             _logger.LogDebug($"Get items - ApiVersion: {RequestedApiVersion}");
-            var items = await _itemsService.GetAllItems();
-            var itemDtos = _mapper.Map<List<ItemDto>>(items);
+            var items = await _itemsService.GetItems(search);
+            var itemDtos = _mapper.Map<PagedListDto<ItemDto>>(items);
             return Ok(itemDtos);
         }
 
