@@ -6,7 +6,7 @@ namespace Playground.Dto
     /// List of items provided with pagination.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PagedListDto<T>
+    public class PagedListDto<T> : ResourceBase
     {
         /// <summary>
         /// List of items.

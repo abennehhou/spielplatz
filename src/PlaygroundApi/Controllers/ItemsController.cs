@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Playground.Domain;
 using Playground.Dto;
 using Playground.Services;
 using PlaygroundApi.Exceptions;
+using PlaygroundApi.Navigation;
 using PlaygroundApi.Validation;
 
 namespace PlaygroundApi.Controllers
@@ -42,6 +44,7 @@ namespace PlaygroundApi.Controllers
             _logger.LogDebug($"Get items - ApiVersion: {RequestedApiVersion}");
             var items = await _itemsService.GetItems(search);
             var itemDtos = _mapper.Map<PagedListDto<ItemDto>>(items);
+            itemDtos.BuildNavigationLinks(Request.GetDisplayUrl());
             return Ok(itemDtos);
         }
 
