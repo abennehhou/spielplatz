@@ -18,6 +18,7 @@ namespace PlaygroundApi.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IOperationsService _operationsService;
+        public const string RouteNameGetAsync = "Operations_GetAsync";
 
         /// <summary>
         /// Constructor of operations controller.
@@ -36,7 +37,7 @@ namespace PlaygroundApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(PagedListDto<OperationDto>), 200)]
-        [Route("")]
+        [Route("", Name = RouteNameGetAsync)]
         public async Task<IActionResult> GetAsync(OperationSearchParameter search)
         {
             if (search == null)

@@ -22,7 +22,7 @@ namespace PlaygroundApi.Controllers
         private readonly ILogger<ItemsController> _logger;
         private readonly IItemsService _itemsService;
         private readonly IMapper _mapper;
-        private const string RouteNameGetById = "Items_GetById";
+        public const string RouteNameGetById = "Items_GetById";
 
         private ApiVersion RequestedApiVersion => HttpContext.ApiVersionProperties()?.ApiVersion;
 

@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Playground.Repositories;
 using Playground.Services;
 using PlaygroundApi.Mapping;
@@ -44,7 +47,9 @@ namespace PlaygroundApi
                 // can also be used to control the format of the API version in route templates
                 o.SubstituteApiVersionInUrl = true;
             });
-            services.AddMvc().AddFluentValidation(fv =>
+            services.AddMvc()
+            .AddJsonOptions(options => options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore)
+            .AddFluentValidation(fv =>
             {
                 fv.RegisterValidatorsFromAssemblyContaining<ItemDtoValidator>();
                 fv.ImplicitlyValidateChildProperties = true;
@@ -91,7 +96,15 @@ namespace PlaygroundApi
             services.AddTransient<IItemsService, ItemsService>();
             services.AddTransient<IOperationsService, OperationsService>();
 
-            var mapper = AutoMapperConfig.Configure();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IUrlHelper>(factory =>
+            {
+                var actionContext = factory.GetService<IActionContextAccessor>().ActionContext;
+                return new UrlHelper(actionContext);
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+            var mapper = AutoMapperConfig.Configure(serviceProvider);
             services.AddTransient<IMapper, IMapper>(c => mapper);
         }
 

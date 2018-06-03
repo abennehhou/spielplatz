@@ -24,6 +24,11 @@ namespace Playground.Dto
         public const string RelationNameNext = "next";
 
         /// <summary>
+        /// Link name to access to the history of operations on the entity.
+        /// </summary>
+        public const string RelationNameOperations = "operations";
+
+        /// <summary>
         /// Hyperlinks related to the resource.
         /// </summary>
         public Dictionary<string, string> Links { get; set; }

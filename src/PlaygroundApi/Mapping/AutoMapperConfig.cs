@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 
 namespace PlaygroundApi.Mapping
 {
@@ -10,11 +11,11 @@ namespace PlaygroundApi.Mapping
         /// <summary> 
         /// Configures AutoMapper. Profiles are initialized. 
         /// </summary> 
-        public static IMapper Configure()
+        public static IMapper Configure(IServiceProvider serviceProvider)
         {
             var config = new MapperConfiguration(x =>
             {
-                x.AddProfile(new PlaygroundProfile());
+                x.AddProfile(new PlaygroundProfile(serviceProvider));
                 x.AllowNullCollections = true;
             });
 
