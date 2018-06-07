@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dto", "src\Dto\Dto.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "test\Services.Tests\Services.Tests.csproj", "{250D99AC-4EC1-4E8F-B3CA-93DACC96B4AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaygroundApi.UnitTests", "test\PlaygroundApi.UnitTests\PlaygroundApi.UnitTests.csproj", "{E6C000C3-273E-4E03-8BE0-6697705F217C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{250D99AC-4EC1-4E8F-B3CA-93DACC96B4AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{250D99AC-4EC1-4E8F-B3CA-93DACC96B4AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{250D99AC-4EC1-4E8F-B3CA-93DACC96B4AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6C000C3-273E-4E03-8BE0-6697705F217C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6C000C3-273E-4E03-8BE0-6697705F217C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6C000C3-273E-4E03-8BE0-6697705F217C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6C000C3-273E-4E03-8BE0-6697705F217C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

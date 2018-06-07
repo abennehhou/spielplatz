@@ -8,7 +8,6 @@ namespace PlaygroundApi.Validation
     /// </summary>
     public class ValidateCommandAttribute : ActionFilterAttribute
     {
-
         /// <summary>
         /// Occurs before the action method is invoked.
         /// </summary>

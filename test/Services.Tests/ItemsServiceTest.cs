@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using MongoDB.Bson;
