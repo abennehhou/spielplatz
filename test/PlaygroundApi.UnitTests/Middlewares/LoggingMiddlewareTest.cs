@@ -26,15 +26,8 @@ namespace PlaygroundApi.UnitTests.Middlewares
             var responseMock = new Mock<HttpResponse>();
 
             contextMock.SetupGet(x => x.Request).Returns(requestMock.Object);
-
-            // Mock request.GetDisplayUrl
-            requestMock.Setup(x => x.Scheme).Returns(scheme);
-            requestMock.Setup(x => x.Host).Returns(new HostString(host));
-            requestMock.Setup(x => x.Path).Returns(new PathString(path));
-            requestMock.Setup(x => x.PathBase).Returns(new PathString("/"));
+            MockRequestGetDispayedUrl(requestMock, scheme, host, path, method, queryString);
             requestMock.Setup(x => x.Method).Returns(method);
-            requestMock.Setup(x => x.QueryString).Returns(new QueryString(queryString));
-
             contextMock.SetupGet(x => x.Response).Returns(responseMock.Object);
             responseMock.SetupGet(x => x.StatusCode).Returns(statusCode);
             var allParts = new[] { scheme, host, path, queryString, method, statusCode.ToString() };
@@ -58,6 +51,42 @@ namespace PlaygroundApi.UnitTests.Middlewares
             contextMock.VerifyAll();
             requestMock.VerifyAll();
             responseMock.VerifyAll();
+        }
+
+        [TestCase("http", "localhost", "/swagger", "", "POST", 400)]
+        public async Task LoggingMiddleware_IgnoresLog_ForSwagger(string scheme, string host, string path,
+            string queryString, string method, int statusCode)
+        {
+            // Arrange
+            RequestDelegate next = (innerHttpContext) => Task.FromResult(0);
+            var loggerMock = new Mock<ILogger<LoggingMiddleware>>();
+            var contextMock = new Mock<HttpContext>();
+            var requestMock = new Mock<HttpRequest>();
+
+            contextMock.SetupGet(x => x.Request).Returns(requestMock.Object);
+            MockRequestGetDispayedUrl(requestMock, scheme, host, path, method, queryString);
+
+            var logRequestMiddleware = new LoggingMiddleware(next: next, logger: loggerMock.Object);
+
+            // Act
+            await logRequestMiddleware.Invoke(contextMock.Object);
+
+            // Assert
+            loggerMock.VerifyAll();
+            contextMock.VerifyAll();
+            requestMock.VerifyAll();
+            loggerMock.Verify(m =>
+                m.Log(It.IsAny<LogLevel>(), It.IsAny<EventId>(), It.IsAny<FormattedLogValues>(), It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()),
+                Times.Never);
+        }
+
+        private void MockRequestGetDispayedUrl(Mock<HttpRequest> requestMock, string scheme, string host, string path, string method, string queryString)
+        {
+            requestMock.Setup(x => x.Scheme).Returns(scheme);
+            requestMock.Setup(x => x.Host).Returns(new HostString(host));
+            requestMock.Setup(x => x.Path).Returns(new PathString(path));
+            requestMock.Setup(x => x.PathBase).Returns(new PathString("/"));
+            requestMock.Setup(x => x.QueryString).Returns(new QueryString(queryString));
         }
     }
 }
