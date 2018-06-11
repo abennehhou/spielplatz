@@ -7,6 +7,7 @@
         InvalidInformation,
         ValueNotFound,
         DeleteValueForbidden,
-        ItemNotFound
+        ItemNotFound,
+        ProductNotFound
     }
 }

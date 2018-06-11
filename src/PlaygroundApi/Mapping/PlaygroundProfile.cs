@@ -2,6 +2,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization;
 using Playground.Domain;
 using Playground.Dto;
 using PlaygroundApi.Controllers;
@@ -33,6 +35,24 @@ namespace PlaygroundApi.Mapping
             CreateMap<string, ObjectId>().ConvertUsing<StringToObjectIdConverter>();
             CreateMap<Operation, OperationDto>();
             CreateMap<Difference, DifferenceDto>();
+
+            CreateMap<BsonDocument, dynamic>()
+                .ConvertUsing((document, y) =>
+                {
+                    if (document == null)
+                        return null;
+
+                    var json = document.ToJson(new JsonWriterSettings { OutputMode = JsonOutputMode.Strict });
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(json);
+                });
+
+            CreateMap<dynamic, BsonDocument>()
+                .ConvertUsing((x, y) =>
+                {
+                    var json = (x == null) ? "{}" : Newtonsoft.Json.JsonConvert.SerializeObject(x);
+                    BsonDocument document = BsonDocument.Parse(json);
+                    return document;
+                });
         }
     }
 }

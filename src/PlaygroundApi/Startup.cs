@@ -93,8 +93,10 @@ namespace PlaygroundApi
 
             services.AddTransient<IItemsRepository, ItemsRepository>(c => new ItemsRepository(connectionString, databaseName, c.GetService<ILogger<ItemsRepository>>()));
             services.AddTransient<IOperationsRepository, OperationsRepository>(c => new OperationsRepository(connectionString, databaseName, c.GetService<ILogger<OperationsRepository>>()));
+            services.AddTransient<IProductsRepository, ProductsRepository>(c => new ProductsRepository(connectionString, databaseName, c.GetService<ILogger<ProductsRepository>>()));
             services.AddTransient<IItemsService, ItemsService>();
             services.AddTransient<IOperationsService, OperationsService>();
+            services.AddTransient<IProductsService, ProductsService>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IUrlHelper>(factory =>
