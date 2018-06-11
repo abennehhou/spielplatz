@@ -15,9 +15,9 @@ namespace Playground.Services
             _productsRepository = productsRepository;
         }
 
-        public async Task<List<BsonDocument>> GetAllAsync()
+        public async Task<List<BsonDocument>> GetAllAsync(BsonDocument filters)
         {
-            return await _productsRepository.GetAll();
+            return await _productsRepository.GetAllAsync(filters);
         }
 
         public async Task<BsonDocument> GetByIdAsync(string id)
@@ -25,12 +25,12 @@ namespace Playground.Services
             var objectId = ObjectId.Empty;
             ObjectId.TryParse(id, out objectId);
 
-            return await _productsRepository.GetById(objectId);
+            return await _productsRepository.GetByIdAsync(objectId);
         }
 
         public async Task InsertAsync(BsonDocument product)
         {
-            await _productsRepository.Insert(product);
+            await _productsRepository.InsertAsync(product);
         }
 
         public async Task<long> ReplaceAsync(BsonDocument product)

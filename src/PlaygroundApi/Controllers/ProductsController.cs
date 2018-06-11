@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +26,36 @@ namespace PlaygroundApi.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Search with simple parameters (not nested).
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(List<dynamic>), 200)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> SearchWithQueryPath([FromQuery] IDictionary<string, string> query)
         {
-            var products = await _productsService.GetAllAsync();
+            _logger.LogDebug("Get all. Query parameters: " + string.Join(", ", query.Select(x => $"{x.Key}={x.Value}")));
+            var filters = new BsonDocument();
+            foreach (var queryParameter in query.Where(x => x.Value != null))
+            {
+                filters[queryParameter.Key] = queryParameter.Value;
+            }
+            var products = await _productsService.GetAllAsync(filters);
+            var result = _mapper.Map<List<dynamic>>(products);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Search from filter as body.
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(typeof(List<dynamic>), 200)]
+        [Route("search")]
+        public async Task<IActionResult> SearchWithBodyFilter([FromBody] dynamic filter)
+        {
+            BsonDocument filterDocument = _mapper.Map<BsonDocument>(filter);
+            _logger.LogDebug($"Get all. Filter: {filterDocument.ToJson()}");
+
+            var products = await _productsService.GetAllAsync(filterDocument);
             var result = _mapper.Map<List<dynamic>>(products);
             return Ok(result);
         }

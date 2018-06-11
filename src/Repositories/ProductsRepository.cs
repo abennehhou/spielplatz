@@ -18,18 +18,18 @@ namespace Playground.Repositories
             _logger = logger;
         }
 
-        public async Task<List<BsonDocument>> GetAll()
+        public async Task<List<BsonDocument>> GetAllAsync(BsonDocument filter)
         {
             var collection = _playgroundContext.GetProductsCollection();
 
-            var query = collection.Find(x => true);
+            var query = collection.Find(filter);
 
             _logger.LogDebug($"Get products query: {query}.");
             var products = await query.ToListAsync();
             return products;
         }
 
-        public async Task<BsonDocument> GetById(ObjectId id)
+        public async Task<BsonDocument> GetByIdAsync(ObjectId id)
         {
             var collection = _playgroundContext.GetProductsCollection();
 
@@ -38,7 +38,7 @@ namespace Playground.Repositories
             return product;
         }
 
-        public async Task Insert(BsonDocument product)
+        public async Task InsertAsync(BsonDocument product)
         {
             await _playgroundContext.GetProductsCollection().InsertOneAsync(product);
         }

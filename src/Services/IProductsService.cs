@@ -6,7 +6,7 @@ namespace Playground.Services
 {
     public interface IProductsService
     {
-        Task<List<BsonDocument>> GetAllAsync();
+        Task<List<BsonDocument>> GetAllAsync(BsonDocument filters);
         Task<BsonDocument> GetByIdAsync(string id);
         Task InsertAsync(BsonDocument product);
         Task<long> ReplaceAsync(BsonDocument product);
