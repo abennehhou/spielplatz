@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
@@ -53,6 +54,10 @@ namespace PlaygroundApi.Mapping
                     BsonDocument document = BsonDocument.Parse(json);
                     return document;
                 });
+
+            CreateMap<ApiVersionDescription, VersionDescriptionDto>()
+                .ForMember(dest => dest.Version, opt => opt.MapFrom(src => src.ApiVersion))
+                .ForMember(dest => dest.IsDeprecated, opt => opt.MapFrom(src => src.IsDeprecated));
         }
     }
 }

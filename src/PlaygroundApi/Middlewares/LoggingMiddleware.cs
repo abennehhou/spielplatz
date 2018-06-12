@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -9,6 +10,8 @@ namespace PlaygroundApi.Middlewares
     public class LoggingMiddleware
     {
         private const string SwaggerUrl = "/swagger";
+        private const string VersionsUrl = "/versions";
+        private static readonly string[] UrlsToIgnore = { SwaggerUrl, VersionsUrl };
 
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
@@ -23,7 +26,7 @@ namespace PlaygroundApi.Middlewares
         {
             var request = context.Request;
             var requestUri = request.GetDisplayUrl();
-            if (requestUri.ToLower().Contains(SwaggerUrl)) // Ignore swagger documentation page
+            if (UrlsToIgnore.Any(x => requestUri.ToLower().Contains(x))) // Ignore swagger documentation page and version calls
             {
                 await _next(context);
                 return;

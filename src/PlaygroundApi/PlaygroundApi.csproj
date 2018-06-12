@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <PackageId>PlaygroundApi</PackageId>
+    <Product>Playground Api</Product>
+    <Authors>abennehhou</Authors>
+    <Description>Web application used for experimentations.</Description>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
