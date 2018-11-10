@@ -50,7 +50,7 @@ namespace Playground.Repositories
 
             _logger.LogDebug($"Get operations query: {query}.");
             var filteredOperations = await query.ToListAsync();
-            var totalRows = (int)await collection.CountAsync(filter);
+            var totalRows = (int)await collection.CountDocumentsAsync(filter);
 
             return filteredOperations.ToPagedList(searchParameters.Skip, searchParameters.Limit, totalRows);
         }

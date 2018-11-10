@@ -41,7 +41,7 @@ namespace Playground.Repositories
 
             _logger.LogDebug($"Get items query: {query}.");
             var items = await query.ToListAsync();
-            var totalRows = (int)await collection.CountAsync(filter);
+            var totalRows = (int)await collection.CountDocumentsAsync(filter);
             return items.ToPagedList(searchParameters.Skip, searchParameters.Limit, totalRows);
         }
 
